@@ -67,7 +67,7 @@
                     <table id="table" class="table table-light table-bordered rounded table-striped table-hover">
                         <thead>
                             <tr>
-                                <th scope="col">Alojamiento</th>
+                                <th data-columna="aloj" scope="col">Alojamiento</th>
                                 <th scope="col">Nombre Completo</th>
                                 <th scope="col">Responsable</th>
                                 <th scope="col">Direccion</th>
@@ -243,15 +243,15 @@
                 // Obtén el valor del campo de búsqueda
                 var valorBusqueda = $(this).val().toLowerCase().trim();
 
-                // Oculta todas las filas de la tabla que no coincidan con el valor de búsqueda
-                $('#table tbody tr').filter(function () {
-                    return !$(this).text().toLowerCase().includes(valorBusqueda);
-                }).hide();
+                // Obtén el índice de la columna que se debe filtrar
+                var indiceColumna = $('th[data-columna]').index();
 
-                // Muestra todas las filas de la tabla que coincidan con el valor de búsqueda
-                $('#table tbody tr').filter(function () {
-                    return $(this).text().toLowerCase().includes(valorBusqueda);
-                }).show();
+                // Oculta todas las filas de la tabla que no coincidan con el valor de búsqueda en la columna especificada
+                $('table tbody tr').each(function () {
+                    var textoColumna = $(this).find('td:eq(' + indiceColumna + ')').text().toLowerCase();
+                    var coincide = textoColumna.indexOf(valorBusqueda) !== -1;
+                    $(this).toggle(coincide);
+                });
             });
             $('#selectDistancia').on('change', function () {
                 // Obtén el valor seleccionado del select
@@ -281,7 +281,7 @@
                 }
             });
         });
-        
+
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
         integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
